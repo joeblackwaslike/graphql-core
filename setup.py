@@ -7,7 +7,9 @@ import re
 _version_re = re.compile(r"VERSION\s+=\s+(.*)")
 
 with open("graphql/__init__.py", "rb") as f:
-    version = ast.literal_eval(_version_re.search(f.read().decode("utf-8")).group(1))
+    version = ast.literal_eval(
+        _version_re.search(f.read().decode("utf-8")).group(1)
+    )
 
 path_copy = sys.path[:]
 
@@ -51,7 +53,7 @@ class PyTest(TestCommand):
 
 setup(
     name="graphql-core",
-    version=version,
+    version="2.2",
     description="GraphQL implementation for Python",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
@@ -77,7 +79,9 @@ setup(
         "Topic :: Internet :: WWW/HTTP",
     ],
     keywords="api graphql protocol rest",
-    packages=find_packages(exclude=["tests", "tests_py35", "tests.*", "tests_py35.*"]),
+    packages=find_packages(
+        exclude=["tests", "tests_py35", "tests.*", "tests_py35.*"]
+    ),
     install_requires=install_requires,
     tests_require=tests_requires,
     cmdclass={"test": PyTest},
