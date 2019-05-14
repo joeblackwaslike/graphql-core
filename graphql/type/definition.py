@@ -39,7 +39,8 @@ def is_input_type(type):
     # type: (Any) -> bool
     named_type = get_named_type(type)
     return isinstance(
-        named_type, (GraphQLScalarType, GraphQLEnumType, GraphQLInputObjectType)
+        named_type,
+        (GraphQLScalarType, GraphQLEnumType, GraphQLInputObjectType),
     )
 
 
@@ -131,7 +132,13 @@ class GraphQLScalarType(GraphQLNamedType):
         OddType = GraphQLScalarType(name='Odd', serialize=coerce_odd)
     """
 
-    __slots__ = "name", "description", "serialize", "parse_value", "parse_literal"
+    __slots__ = (
+        "name",
+        "description",
+        "serialize",
+        "parse_value",
+        "parse_literal",
+    )
 
     def __init__(
         self,
@@ -248,7 +255,9 @@ def define_field_map(
         assert_valid_name(field_name)
         assert isinstance(
             field, GraphQLField
-        ), "{}.{} must be an instance of GraphQLField.".format(type, field_name)
+        ), "{}.{} must be an instance of GraphQLField.".format(
+            type, field_name
+        )
         field_args = getattr(field, "args", None)
 
         if field_args:
@@ -537,7 +546,9 @@ class GraphQLEnumType(GraphQLNamedType):
             enum_value = self._name_lookup.get(value)
 
             if enum_value:
-                return enum_value.value
+                # return enum_value.value
+                # GRAPHQL Spec uses names not values
+                return enum_value.name
 
         return None
 

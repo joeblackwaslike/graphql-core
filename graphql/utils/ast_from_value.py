@@ -23,7 +23,9 @@ def ast_from_value(value, type=None):
 
     if isinstance(value, list):
         item_type = type.of_type if isinstance(type, GraphQLList) else None
-        return ast.ListValue([ast_from_value(item, item_type) for item in value])
+        return ast.ListValue(
+            [ast_from_value(item, item_type) for item in value]
+        )
 
     elif isinstance(type, GraphQLList):
         return ast_from_value(value, type.of_type)
@@ -45,8 +47,13 @@ def ast_from_value(value, type=None):
         return ast.FloatValue(string_num)
 
     if isinstance(value, string_types):
-        if isinstance(type, GraphQLEnumType) and re.match(
-            r"^[_a-zA-Z][_a-zA-Z0-9]*$", value
+        if (
+            isinstance(type, GraphQLEnumType)
+            or (
+                getattr(type, "type", None)
+                and isinstance(type.type, GraphQLEnumType)
+            )
+            and re.match(r"^[_a-zA-Z][_a-zA-Z0-9]*$", value)
         ):
             return ast.EnumValue(value)
 

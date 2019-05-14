@@ -68,7 +68,9 @@ def value_from_ast(value_ast, type, variables=None):
 
             field_ast = field_asts[field_name]
             field_value_ast = field_ast.value
-            field_value = value_from_ast(field_value_ast, field.type, variables)
+            field_value = value_from_ast(
+                field_value_ast, field.type, variables
+            )
 
             # We use out_name as the output name for the
             # dict if exists
@@ -76,6 +78,8 @@ def value_from_ast(value_ast, type, variables=None):
 
         return type.create_container(obj)
 
-    assert isinstance(type, (GraphQLScalarType, GraphQLEnumType)), "Must be input type"
+    assert isinstance(
+        type, (GraphQLScalarType, GraphQLEnumType)
+    ), "Must be input type"
 
     return type.parse_literal(value_ast)
